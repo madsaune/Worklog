@@ -4,28 +4,22 @@ A simple cmdline tool for tracking time spent on a particular task.
 
 ## Features
 
-- [ ] Use CTRL+D or CTRL+C to stop tracking
+- [X] Use CTRL+C to stop tracking
+- [X] Be able to add metadata
 - [ ] Write to sqlite database
 - [ ] Export function
-- [ ] Be able to add more metadata
-
-## Datastructure
-
-```golang
-type Project struct {
-  Title    string
-  Metadata map[string]string
-  Start    time.Time
-  Stop     time.Time
-}
-```
-
 
 ## Example
 
 ```bash
-track-work start "myProject" "more" "meta" "data"
+track-work "Sample Project" "customer=ACME" "type=meeting"
 Started tracking...
 
 Press CTRL+D to stop.
+^C
+
+Title     : Sample Project
+Start     : 12:00:00
+Stop      : 13:37:00
+Duration  : 01h, 37m
 ```
