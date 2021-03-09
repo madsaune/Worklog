@@ -1,4 +1,4 @@
-#track-work
+#worklog
 
 A simple cmdline tool for tracking time spent on a particular task.
 
@@ -12,7 +12,7 @@ A simple cmdline tool for tracking time spent on a particular task.
 ## Example
 
 ```bash
-track-work "Sample Project" "customer=ACME" "type=meeting"
+worklog "Sample Project" "customer=ACME" "type=meeting"
 Started tracking...
 
 Press CTRL+D to stop.
