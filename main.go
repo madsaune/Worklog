@@ -28,5 +28,6 @@ func main() {
 	fmt.Println("Press CTRL+C to stop.")
 	for {
 		time.Sleep(10 * time.Minute) // or runtime.Gosched() or similar per @misterbee
+		fmt.Printf("Still tracking... [%s]\n", FormatDuration(w.GetDuration()))
 	}
 }
