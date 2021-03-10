@@ -6,8 +6,10 @@ A simple cmdline tool for tracking time spent on a particular task.
 
 - [X] Use CTRL+C to stop tracking
 - [X] Be able to add metadata
-- [ ] Write to sqlite database
+- [X] Write to sqlite database
+- [X] Create database in `~/.worklog`
 - [ ] Export function
+- [ ] `start`, `list`, `show`, `delete` arguments
 
 ## Example
 
