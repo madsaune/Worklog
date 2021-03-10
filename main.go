@@ -30,7 +30,10 @@ func main() {
 	// Create .worklog folder under user HOME if not exist
 	_, err = os.Stat(userHomeDir + worklogPath)
 	if os.IsNotExist(err) {
-		os.Mkdir(userHomeDir+worklogPath, 0700)
+		err := os.Mkdir(userHomeDir+worklogPath, 0700)
+		if err != nil {
+			log.Fatalln("Could not create .worklog folder in users HomeDir")
+		}
 	}
 
 	sqlDatabase, err := sql.Open("sqlite3", userHomeDir+databasePath)
@@ -47,7 +50,10 @@ func main() {
 	go func() {
 		<-c
 		w.Stop()
-		w.NewEntry()
+		err := w.NewEntry()
+		if err != nil {
+			log.Fatalln("Could not create a new entry in the database")
+		}
 		fmt.Printf("\n\n%s", w)
 
 		os.Exit(0)
