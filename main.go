@@ -1,16 +1,45 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
+	"os/user"
 	"syscall"
 	"time"
+
+	_ "github.com/mattn/go-sqlite3"
+)
+
+const (
+	worklogPath  = "/.worklog"
+	databasePath = worklogPath + "/worklog.db"
 )
 
 func main() {
 
-	w := NewWorklogClient(os.Args)
+	currentUser, err := user.Current()
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	userHomeDir := currentUser.HomeDir
+
+	// Create .worklog folder under user HOME if not exist
+	_, err = os.Stat(userHomeDir + worklogPath)
+	if os.IsNotExist(err) {
+		os.Mkdir(userHomeDir+worklogPath, 0700)
+	}
+
+	sqlDatabase, err := sql.Open("sqlite3", userHomeDir+databasePath)
+	if err != nil {
+		log.Fatal("Could not open database")
+	}
+
+	w := NewWorklogClient(os.Args, sqlDatabase)
+	w.InitDB(userHomeDir + databasePath)
 	w.Start()
 
 	c := make(chan os.Signal)
@@ -18,6 +47,7 @@ func main() {
 	go func() {
 		<-c
 		w.Stop()
+		w.NewEntry()
 		fmt.Printf("\n\n%s", w)
 
 		os.Exit(0)
