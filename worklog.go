@@ -32,9 +32,15 @@ func (w *Worklog) Stop() {
 	w.StopTime = time.Now()
 }
 
+// GetTotalDuration return the total duration from start to stop
+func (w Worklog) GetTotalDuration() time.Duration {
+	return w.StopTime.Sub(w.StartTime)
+}
+
 // GetDuration returns the duration between StopTime and StartTime
 func (w Worklog) GetDuration() time.Duration {
-	return w.StopTime.Sub(w.StartTime)
+	currentTime := time.Now()
+	return currentTime.Sub(w.StartTime)
 }
 
 func (w *Worklog) parseMetadata(args []string) {
@@ -58,7 +64,7 @@ func (w Worklog) String() string {
 		"Title", w.Title,
 		"Start", FormatTime(w.StartTime),
 		"Stop", FormatTime(w.StopTime),
-		"Duration", FormatDuration(w.GetDuration()),
+		"Duration", FormatDuration(w.GetTotalDuration()),
 	)
 }
 
@@ -69,9 +75,11 @@ func FormatTime(t time.Time) string {
 
 // FormatDuration formats a time.Duration type to 00h, 00m
 func FormatDuration(d time.Duration) string {
-	d = d.Round(time.Minute)
+	d = d.Round(time.Second)
 	h := d / time.Hour
 	d -= h * time.Hour
 	m := d / time.Minute
-	return fmt.Sprintf("%02dh, %02dm", h, m)
+	d -= m * time.Minute
+	s := d / time.Second
+	return fmt.Sprintf("%02dh, %02dm, %02ds", h, m, s)
 }
